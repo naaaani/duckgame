@@ -1,5 +1,5 @@
 from pygame_button import Button
-
+from game_state import GameState
 
 class Menu:
 
@@ -15,6 +15,9 @@ class Menu:
         self.game = game
         self.screen = self.game.get_screen() 
         self.create_button()
+    
+    def get_name(self):
+        return "menu"
 
     def create_button(self):
 
@@ -36,11 +39,11 @@ class Menu:
     def start(self):
         pass
 
-    def proc_event(self, event):
-
+    def proc_event(self, event):       
         self.button.check_event(event)
-        self.button.update(self.screen)
-
-
+       
     def press(self):
-        print("Press")
+        self.game.menu_start_pressed()
+
+    def update(self):
+        self.button.update(self.screen)
