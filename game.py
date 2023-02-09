@@ -10,6 +10,7 @@ class Game:
     def __init__(self):
 
         pygame.init()
+        pygame.font.init()
 
         self.screen_width = 800
         self.screen_height = 600

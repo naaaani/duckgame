@@ -1,3 +1,4 @@
+import pygame
 from pygame_button import Button
 from game_state import GameState
 
@@ -15,6 +16,7 @@ class Menu:
         self.game = game
         self.screen = self.game.get_screen() 
         self.create_button()
+        self.create_title()
     
     def get_name(self):
         return "menu"
@@ -36,6 +38,16 @@ class Menu:
         )
         self.button.rect.center = (width / 2, height / 4 * 3)
 
+    def create_title(self):
+
+        font = pygame.font.SysFont('Arial', 50)
+        self.title_surface = font.render('Duck game', False, (200, 200, 200,))
+        (screen_width, screen_height,) = self.game.get_screen_dim()
+        (title_width, title_height,) = self.title_surface.get_size()
+        self.title_x = (screen_width / 2) - (title_width / 2)
+        self.title_y = (screen_height / 4) - (title_height / 2)
+
+
     def start(self):
         pass
 
@@ -47,3 +59,4 @@ class Menu:
 
     def update(self):
         self.button.update(self.screen)
+        self.screen.blit(self.title_surface, (self.title_x, self.title_y,))
