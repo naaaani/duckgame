@@ -2,7 +2,7 @@ import pygame
 from pygame_button import Button
 from game_state import GameState
 
-class Menu:
+class Menu(GameState):
 
     RED = (255, 0, 0)
     BLUE = (0, 0, 255)

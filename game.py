@@ -19,12 +19,18 @@ class Game:
 
         self.menu = Menu(self)
         self.play = Play(self)
-
+        
+        self.active_state = None
         self.set_active_state(self.menu)
 
-    def set_active_state(self, state):        
+    def set_active_state(self, state):
+
+        if self.active_state is not None:
+            self.active_state.deactivate()
         self.active_state = state
-        print(f"---- active: {self.active_state.get_name()}")
+        self.active_state.activate()
+
+        print(f"---- active: {self.active_state.get_name()}")        
 
     def create_screen(self):
 
