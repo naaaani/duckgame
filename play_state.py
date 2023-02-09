@@ -6,8 +6,10 @@ class Play(GameState):
 
     def __init__(self, game):
         self.game = game
-        self.duck1 = Duck(self.game, self, 20, 5)
-        self.duck2 = Duck(self.game, self, 100, 3)
+        self.ducks = []
+
+        self.duck1 = Duck(self.game, self, 20, 1)
+        self.duck2 = Duck(self.game, self, 100, 2)
 
     def get_name(self):
         return "play"
