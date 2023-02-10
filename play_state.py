@@ -7,9 +7,9 @@ class Play(GameState):
     def __init__(self, game):
         self.game = game
         self.ducks = []
-
-        self.duck1 = Duck(self.game, self, 20, 1)
-        self.duck2 = Duck(self.game, self, 100, 2)
+        for index in range(5):
+            duck = self.create_duck(index)
+            self.ducks.append(duck)
 
     def get_name(self):
         return "play"
@@ -19,10 +19,25 @@ class Play(GameState):
             self.game.play_end()
     
     def update(self):
-        self.duck1.update()
-        self.duck2.update()
+        
+        for duck in self.ducks:
+            duck.update()
 
     def activate(self):
-        self.duck1.reset()
-        self.duck2.reset()
+        
+        for duck in self.ducks:
+            duck.reset()
+
+    def duck_over(self, id):
+        duck = self.create_duck(id)
+        self.ducks[id] = duck
+        
+    def create_duck(self, id):
+
+        duck = Duck(id, self.game, self, id * 20, id + 1)
+
+
+        print(f"Duck {id}")
+
+        return duck
 

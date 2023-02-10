@@ -21,7 +21,8 @@ class Game:
         self.play = Play(self)
         
         self.active_state = None
-        self.set_active_state(self.menu)
+        #TODO: change back to menu state
+        self.set_active_state(self.play)
 
     def set_active_state(self, state):
 
@@ -52,6 +53,7 @@ class Game:
 
     def main_loop(self):
 
+        clock = pygame.time.Clock()
         running = True
         while running:
 
@@ -59,11 +61,12 @@ class Game:
                 if event.type == pygame.QUIT:
                     quit()
                 self.active_state.proc_event(event)
-                print(event)
+                #print(event)
         
             pygame.display.get_surface().fill((0,0,0,))
             self.active_state.update()
             pygame.display.update()     
+            clock.tick(60)
 
 if __name__ == "__main__":
     game = Game()

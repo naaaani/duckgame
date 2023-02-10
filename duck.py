@@ -2,8 +2,9 @@ import pygame
 
 class Duck:
 
-    def __init__(self, game, play, y, speed):
+    def __init__(self, id, game, play, y, speed):
 
+        self.id = id
         self.game = game
         self.screen = self.game.get_screen() 
         self.play = play
@@ -29,6 +30,7 @@ class Duck:
     def update(self):
 
         if self.x > self.screen_width:
+            self.play.duck_over(self.id)
             return
                 
         self.screen.blit(self.duck_image, (self.x, self.y,))
