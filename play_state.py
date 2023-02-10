@@ -34,8 +34,10 @@ class Play(GameState):
         
     def create_duck(self, id):
 
-        duck = Duck(id, self.game, self, id * 20, id + 1)
-
+        (_, screen_height,) = self.game.get_screen_dim()
+        y = (screen_height / 5) * (id + 0.5)
+        speed = id + 1
+        duck = Duck(id, self.game, self, y, speed)
 
         print(f"Duck {id}")
 
