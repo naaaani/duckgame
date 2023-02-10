@@ -41,15 +41,11 @@ class Menu(GameState):
     def create_title(self):
 
         font = pygame.font.SysFont('Arial', 50)
-        self.title_surface = font.render('Duck game', False, (200, 200, 200,))
+        self.title_surface = font.render('Duck game', False, (20, 20, 40,))
         (screen_width, screen_height,) = self.game.get_screen_dim()
         (title_width, title_height,) = self.title_surface.get_size()
         self.title_x = (screen_width / 2) - (title_width / 2)
         self.title_y = (screen_height / 4) - (title_height / 2)
-
-
-    def start(self):
-        pass
 
     def proc_event(self, event):       
         self.button.check_event(event)

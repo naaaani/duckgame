@@ -63,7 +63,7 @@ class Game:
                 self.active_state.proc_event(event)
                 #print(event)
         
-            pygame.display.get_surface().fill((0,0,0,))
+            pygame.display.get_surface().fill((200,200,255,))
             self.active_state.update()
             pygame.display.update()     
             clock.tick(60)
