@@ -52,6 +52,9 @@ class Play(GameState):
         self.ch_x = -self.crosshair_w
         self.ch_y = -self.crosshair_h
 
+    def duck_hit(self, id):
+        pass
+
     def duck_over(self, id):
 
         duck = self.create_duck(id)
@@ -60,7 +63,11 @@ class Play(GameState):
     def create_duck(self, id):
 
         y = (self.screen_height / 5) * (id + 0.5)
-        speed = id + 1
+        if id % 2 == 0:
+            speed = -id - 1
+        else:
+            speed = id + 1
+
         duck = Duck(id, self.game, self, y, speed)
 
         print(f"Duck {id}")
