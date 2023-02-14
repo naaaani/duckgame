@@ -16,6 +16,8 @@ class Play(GameState):
             self.ducks.append(duck)
 
         self.create_crosshair()
+        self.create_countdown()
+
 
     def get_name(self):
         return "play"
@@ -23,7 +25,6 @@ class Play(GameState):
     def proc_event(self, event):
 
         if event.type == pygame.MOUSEBUTTONUP:
-            #self.game.play_end()
             self.shoot(event.pos[0], event.pos[1])
         
         if event.type == pygame.MOUSEMOTION:
@@ -31,14 +32,21 @@ class Play(GameState):
 
         if event.type == pygame.WINDOWLEAVE:
             self.hide_crosshair()
+        
+        if event.type == pygame.USEREVENT:
+            self.timer = self.timer - 1
+            if self.timer == -1:
+                self.game.play_end()
+                return
+            self.render_countdown_surface()
 
-    
     def update(self):
         
         for duck in self.ducks:
             duck.update()
 
         self.update_crosshair()
+        self.update_countdown()
 
     def activate(self):
         
@@ -46,6 +54,13 @@ class Play(GameState):
             duck.reset()
         
         self.hide_crosshair()
+
+        pygame.time.set_timer(pygame.USEREVENT, 1000)
+        self.timer = 30
+
+    def deactivate(self):
+
+        pygame.time.set_timer(pygame.USEREVENT, 0)
 
     def hide_crosshair(self):
 
@@ -70,8 +85,6 @@ class Play(GameState):
 
         duck = Duck(id, self.game, self, y, speed)
 
-        print(f"Duck {id}")
-
         return duck
     
     def create_crosshair(self):
@@ -94,3 +107,21 @@ class Play(GameState):
 
         for duck in self.ducks:
             duck.shoot(x, y)
+    
+    def create_countdown(self):
+
+        self.timer = 30
+        self.render_countdown_surface()
+        (screen_width, screen_height,) = self.game.get_screen_dim()
+        (countdown_width, countdown_height,) = self.countdown_surface.get_size()
+        self.countdown_x = screen_width - countdown_width
+        self.countdown_y = 0
+
+    def update_countdown(self):
+        
+        self.screen.blit(self.countdown_surface, (self.countdown_x, self.countdown_y,))
+
+    def render_countdown_surface(self):
+
+        font = pygame.font.SysFont('Arial', 30)
+        self.countdown_surface = font.render(str(self.timer), False, (20, 20, 40,))

@@ -1,5 +1,6 @@
 import pygame
 
+
 class Duck:
 
     ST_FLY = 1
@@ -11,34 +12,46 @@ class Duck:
         self.state = Duck.ST_FLY
         self.id = id
         self.game = game
-        self.screen = self.game.get_screen() 
+        self.screen = self.game.get_screen()
         self.play = play
         (self.screen_width, self.screen_height,) = self.game.get_screen_dim()
 
         self.y = y
         self.speed = self.screen_width * speed / 1000
+        
+        self.init_image()
+        self.init_pos()
+
+        self.duck_image = pygame.transform.scale(self.duck_image, (self.duck_width, self.duck_height,))
+        self.fall_image = pygame.transform.scale(self.fall_image, (self.duck_height, self.duck_width,))
+
+        self.offset_x = self.duck_width / 2
+        self.offset_y = self.duck_height / 2
+
+        self.reset()
+
+
+    def init_image(self):
 
         self.duck_image = pygame.image.load("../images/duck1.png")
         (orig_width, orig_height,) = self.duck_image.get_size()
-        duck_height = self.screen_height / 6
-        shrink_width = duck_height / orig_height
-        duck_width = orig_width * shrink_width
-        if speed < 0:
-            self.starting_x = self.screen_width + (duck_width / 2)
-            self.duck_image = pygame.transform.flip(self.duck_image, flip_x=True, flip_y=False)
+        self.duck_height = self.screen_height / 6
+        shrink_width = self.duck_height / orig_height
+        self.duck_width = orig_width * shrink_width
+
+    def init_pos(self):
+
+        if self.speed < 0:
+            self.starting_x = self.screen_width + (self.duck_width / 2)
+            self.duck_image = pygame.transform.flip(
+            self.duck_image, flip_x=True, flip_y=False)
             self.fall_image = pygame.transform.rotate(self.duck_image, 90)
         else:
-            self.starting_x = -duck_width / 2
+            self.starting_x = -self.duck_width / 2
             self.fall_image = pygame.transform.rotate(self.duck_image, -90)
-        self.fly_ending_x = self.screen_width + (duck_width / 2)
-        self.fall_ending_y = self.screen_height + (duck_width / 2)
-        self.duck_image = pygame.transform.scale(self.duck_image, (duck_width, duck_height,))
-        self.fall_image = pygame.transform.scale(self.fall_image, (duck_height, duck_width,))
 
-        self.offset_x = duck_width / 2
-        self.offset_y = duck_height / 2
-
-        self.reset()
+        self.fly_ending_x = self.screen_width + (self.duck_width / 2)
+        self.fall_ending_y = self.screen_height + (self.duck_width / 2)
 
     def reset(self):
         self.x = self.starting_x

@@ -31,8 +31,6 @@ class Game:
         self.active_state = state
         self.active_state.activate()
 
-        print(f"---- active: {self.active_state.get_name()}")        
-
     def create_screen(self):
 
         self.screen = pygame.display.set_mode(
