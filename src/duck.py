@@ -16,6 +16,8 @@ class Duck:
         self.play = play
         (self.screen_width, self.screen_height,) = self.game.get_screen_dim()
 
+        self.score = abs(speed)
+    
         self.y = y
         self.speed = self.screen_width * speed / 1000
         
@@ -100,3 +102,7 @@ class Duck:
         self.play.duck_hit(self.id)
         self.state = Duck.ST_FALL
         #self.play.duck_over(self.id)
+
+    def get_score(self):
+
+        return self.score

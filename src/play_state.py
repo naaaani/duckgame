@@ -17,7 +17,7 @@ class Play(GameState):
 
         self.create_crosshair()
         self.create_countdown()
-
+        self.create_score()
 
     def get_name(self):
         return "play"
@@ -47,6 +47,7 @@ class Play(GameState):
 
         self.update_crosshair()
         self.update_countdown()
+        self.update_score()
 
     def activate(self):
         
@@ -68,7 +69,10 @@ class Play(GameState):
         self.ch_y = -self.crosshair_h
 
     def duck_hit(self, id):
-        pass
+        
+        duck = self.ducks[id]
+        self.score += duck.get_score()
+        self.render_score_surface()
 
     def duck_over(self, id):
 
@@ -114,7 +118,7 @@ class Play(GameState):
         self.render_countdown_surface()
         (screen_width, screen_height,) = self.game.get_screen_dim()
         (countdown_width, countdown_height,) = self.countdown_surface.get_size()
-        self.countdown_x = screen_width - countdown_width
+        self.countdown_x = screen_width - (countdown_width * 1.5)
         self.countdown_y = 0
 
     def update_countdown(self):
@@ -125,3 +129,21 @@ class Play(GameState):
 
         font = pygame.font.SysFont('Arial', 30)
         self.countdown_surface = font.render(str(self.timer), False, (20, 20, 40,))
+    
+    def create_score(self):
+        
+        self.score = 0
+        self.render_score_surface()
+        (screen_width, screen_height,) = self.game.get_screen_dim()
+        (score_width, score_height,) = self.score_surface.get_size()
+        self.score_x = score_width / 2
+        self.score_y = 0
+
+    def render_score_surface(self):
+
+        font = pygame.font.SysFont('Arial', 30)
+        self.score_surface = font.render(str(self.score), False, (20, 20, 40,))
+
+    def update_score(self):
+        
+        self.screen.blit(self.score_surface, (self.score_x, self.score_y,))
