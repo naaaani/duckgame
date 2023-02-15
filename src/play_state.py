@@ -1,10 +1,10 @@
 import pygame
 import random
-from game_state import GameState
+from abstract_state import AbstractState
 from duck import Duck
 from flare import Flare
 
-class Play(GameState):
+class Play(AbstractState):
 
     def __init__(self, game):
 
@@ -172,5 +172,9 @@ class Play(GameState):
     def update_score(self):
         
         self.screen.blit(self.score_surface, (self.score_x, self.score_y,))
+    
+    def get_score(self):
+
+        return self.score
 
 

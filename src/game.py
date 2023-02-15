@@ -3,6 +3,7 @@
 import pygame
 from menu_state import Menu
 from play_state import Play
+from game_over_state import GameOver
 
 
 class Game:
@@ -19,10 +20,14 @@ class Game:
 
         self.menu = Menu(self)
         self.play = Play(self)
-        
+        self.game_over = GameOver(self)
+
+        self.hiscore_fnam = "hiscore.txt"
+        self.last_score = 0
+        self.load_hiscore()
+
         self.active_state = None
-        #TODO: change back to menu state
-        self.set_active_state(self.play)
+        self.set_active_state(self.menu)
 
     def set_active_state(self, state):
 
@@ -33,8 +38,7 @@ class Game:
 
     def create_screen(self):
 
-        self.screen = pygame.display.set_mode(
-            (self.screen_width, self.screen_height,))
+        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height,))
         pygame.display.flip()
 
     def get_screen(self):
@@ -47,6 +51,16 @@ class Game:
         self.set_active_state(self.play)
 
     def play_end(self):
+        
+        self.set_active_state(self.game_over)
+        self.last_score = self.play.get_score()
+        self.game_over.set_score(self.last_score)
+
+        if self.last_score > self.hiscore:
+            self.set_hiscore(self.last_score)
+            self.save_hiscore()
+    
+    def game_over_end(self):
         self.set_active_state(self.menu)
 
     def main_loop(self):
@@ -65,6 +79,27 @@ class Game:
             self.active_state.update()
             pygame.display.update()     
             clock.tick(60)
+    
+    def set_hiscore(self, hiscore):
+
+        self.hiscore = hiscore
+        self.menu.set_hiscore(hiscore)
+  
+    def load_hiscore(self):
+        
+        try:
+            with open(self.hiscore_fnam, 'r') as f:
+                hi = int(f.read())
+                self.set_hiscore(hi)
+        except FileNotFoundError:
+            self.set_hiscore(0)
+        except ValueError:
+            self.set_hiscore(0)
+
+    def save_hiscore(self):
+
+        with open(self.hiscore_fnam, 'w') as f:
+            f.write(str(self.hiscore))
 
 if __name__ == "__main__":
     game = Game()

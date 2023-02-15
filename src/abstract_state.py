@@ -1,4 +1,4 @@
-class GameState:
+class AbstractState:
 
     def get_name(self):
         assert(False)
