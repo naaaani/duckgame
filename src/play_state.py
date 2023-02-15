@@ -2,6 +2,7 @@ import pygame
 import random
 from game_state import GameState
 from duck import Duck
+from flare import Flare
 
 class Play(GameState):
 
@@ -19,6 +20,21 @@ class Play(GameState):
         self.create_crosshair()
         self.create_countdown()
         self.create_score()
+
+    def activate(self):
+        
+        for duck in self.ducks:
+            duck.reset()
+        
+        self.hide_crosshair()
+
+        pygame.time.set_timer(pygame.USEREVENT, 1000)
+        self.timer = 30
+        self.render_countdown_surface()
+        self.score = 0
+        self.render_score_surface()
+        self.flare_id = 0
+        self.flares = {}
 
     def get_name(self):
         return "play"
@@ -46,22 +62,19 @@ class Play(GameState):
         for duck in self.ducks:
             duck.update()
 
-        self.update_crosshair()
-        self.update_countdown()
+        self.flares_to_del = []
+        for flare in self.flares.values():
+            flare.update()
+        for id in self.flares_to_del:
+            del self.flares[id] 
+
         self.update_score()
+        self.update_countdown()
+        self.update_crosshair()
 
-    def activate(self):
-        
-        for duck in self.ducks:
-            duck.reset()
-        
-        self.hide_crosshair()
+    def flare_over(self, id):
 
-        pygame.time.set_timer(pygame.USEREVENT, 1000)
-        self.timer = 30
-        self.render_countdown_surface()
-        self.score = 0
-        self.render_score_surface()
+        self.flares_to_del.append(id)
 
     def deactivate(self):
 
@@ -113,8 +126,16 @@ class Play(GameState):
 
     def shoot(self, x, y):
 
+        self.create_flare(x, y)
+
         for duck in self.ducks:
             duck.shoot(x, y)
+
+    def create_flare(self, x, y):
+
+        flare = Flare(self.flare_id, self.game, self, x, y)
+        self.flares[self.flare_id] = flare
+        self.flare_id += 1
     
     def create_countdown(self):
 
@@ -151,3 +172,5 @@ class Play(GameState):
     def update_score(self):
         
         self.screen.blit(self.score_surface, (self.score_x, self.score_y,))
+
+
