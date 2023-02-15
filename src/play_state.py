@@ -59,6 +59,9 @@ class Play(GameState):
 
         pygame.time.set_timer(pygame.USEREVENT, 1000)
         self.timer = 30
+        self.render_countdown_surface()
+        self.score = 0
+        self.render_score_surface()
 
     def deactivate(self):
 
@@ -88,8 +91,6 @@ class Play(GameState):
         if random.randrange(1, 3) == 1:
             speed = -speed
         
-        print(id, speed)
-
         duck = Duck(id, self.game, self, y, speed)
 
         return duck

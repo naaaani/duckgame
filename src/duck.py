@@ -38,7 +38,6 @@ class Duck:
 
         self.reset()
 
-
     def init_image(self):
 
         self.duck_image = pygame.image.load("../images/duck1.png")
@@ -59,7 +58,6 @@ class Duck:
             self.starting_x = -self.duck_width / 2
             self.fall_image = pygame.transform.rotate(self.duck_image, -90)
             self.fly_ending_x = self.screen_width + (self.duck_width / 2)
-
         
         self.fall_ending_y = self.screen_height + (self.duck_width / 2)
 
@@ -110,12 +108,27 @@ class Duck:
             return
         if shoot_y > (self.y + self.offset_y):
             return
-        
-        #TODO: better hitbox
 
-        self.play.duck_hit(self.id)
-        self.state = Duck.ST_FALL
+        for around_x in range(-9, 9):
+            for around_y in range(-5, 5):
+                if self.hitbox(shoot_x + around_x, shoot_y + around_y):
+                    self.play.duck_hit(self.id)
+                    self.state = Duck.ST_FALL
+                    return
 
+    def hitbox(self, shoot_x, shoot_y):
+
+        duck_corner_x = self.x - self.offset_x
+        hit_x = int(shoot_x - duck_corner_x)
+        duck_corner_y = self.y - self.offset_y
+        hit_y = int(shoot_y - duck_corner_y)
+        try:
+            color = self.duck_image.get_at((hit_x, hit_y,))
+        except IndexError:
+            color = (0, 0, 0, 0,)
+
+        return color[3] > 50
+    
     def get_score(self):
 
         return self.score
