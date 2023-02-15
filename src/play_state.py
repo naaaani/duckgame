@@ -1,4 +1,5 @@
 import pygame
+import random
 from game_state import GameState
 from duck import Duck
 
@@ -82,10 +83,12 @@ class Play(GameState):
     def create_duck(self, id):
 
         y = (self.screen_height / 5) * (id + 0.5)
-        if id % 2 == 0:
-            speed = -id - 1
-        else:
-            speed = id + 1
+
+        speed = random.randrange(1, 7)
+        if random.randrange(1, 3) == 1:
+            speed = -speed
+        
+        print(id, speed)
 
         duck = Duck(id, self.game, self, y, speed)
 

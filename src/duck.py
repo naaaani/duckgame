@@ -16,9 +16,15 @@ class Duck:
         self.play = play
         (self.screen_width, self.screen_height,) = self.game.get_screen_dim()
 
-        self.score = abs(speed)
+        self.score = abs(speed) 
     
         self.y = y
+
+        if speed < 0:
+            speed -= 5
+        else:
+            speed += 5
+
         self.speed = self.screen_width * speed / 1000
         
         self.init_image()
@@ -48,11 +54,13 @@ class Duck:
             self.duck_image = pygame.transform.flip(
             self.duck_image, flip_x=True, flip_y=False)
             self.fall_image = pygame.transform.rotate(self.duck_image, 90)
+            self.fly_ending_x = -(self.duck_width / 2)
         else:
             self.starting_x = -self.duck_width / 2
             self.fall_image = pygame.transform.rotate(self.duck_image, -90)
+            self.fly_ending_x = self.screen_width + (self.duck_width / 2)
 
-        self.fly_ending_x = self.screen_width + (self.duck_width / 2)
+        
         self.fall_ending_y = self.screen_height + (self.duck_width / 2)
 
     def reset(self):
@@ -67,7 +75,12 @@ class Duck:
 
     def update_fly(self):
 
-        if self.x > self.fly_ending_x:
+        if self.speed > 0:
+            out_of_screen = (self.x > self.fly_ending_x)
+        else:
+            out_of_screen = (self.x < self.fly_ending_x)
+            
+        if out_of_screen:
             self.state = Duck.ST_OVER        
             self.play.duck_over(self.id)
             return
@@ -99,9 +112,9 @@ class Duck:
             return
         
         #TODO: better hitbox
+
         self.play.duck_hit(self.id)
         self.state = Duck.ST_FALL
-        #self.play.duck_over(self.id)
 
     def get_score(self):
 
