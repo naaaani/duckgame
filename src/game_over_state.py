@@ -23,7 +23,7 @@ class GameOver(AbstractState):
         self.title_y = (screen_height / 4) - (title_height / 2)
 
     def activate(self):
-        pygame.time.set_timer(pygame.USEREVENT, 3000)
+        pygame.time.set_timer(pygame.USEREVENT, 2000)
         self.mouse_lock = True
 
     def deactivate(self):

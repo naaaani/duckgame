@@ -85,11 +85,6 @@ class Play(AbstractState):
         self.ch_x = -self.crosshair_w
         self.ch_y = -self.crosshair_h
 
-    def duck_hit(self, id):
-        
-        duck = self.ducks[id]
-        self.score += duck.get_score()
-        self.render_score_surface()
 
     def duck_over(self, id):
 
@@ -112,7 +107,7 @@ class Play(AbstractState):
         
         self.crosshair_image = pygame.image.load("../images/crosshair.png")
         (orig_width, orig_height,) = self.crosshair_image.get_size()
-        self.crosshair_h = self.screen_height / 5
+        self.crosshair_h = self.screen_height / 8
         shrink_factor = self.crosshair_h / orig_height
         self.crosshair_w = orig_width * shrink_factor
         self.crosshair_image = pygame.transform.scale(self.crosshair_image, (self.crosshair_w, self.crosshair_h,))
@@ -127,9 +122,23 @@ class Play(AbstractState):
     def shoot(self, x, y):
 
         self.create_flare(x, y)
+        
+        self.duck_miss = True
 
         for duck in self.ducks:
             duck.shoot(x, y)
+        
+        if self.duck_miss and self.score > 0:
+            self.score -= 1
+            self.render_score_surface()
+
+    def duck_hit(self, id):
+        
+        self.duck_miss = False
+
+        duck = self.ducks[id]
+        self.score += duck.get_score()
+        self.render_score_surface()
 
     def create_flare(self, x, y):
 
